@@ -49,13 +49,13 @@ namespace LoadBingPicture.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public long PictureNo {
+        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
+        public string Region {
             get {
-                return ((long)(this["PictureNo"]));
+                return ((string)(this["Region"]));
             }
             set {
-                this["PictureNo"] = value;
+                this["Region"] = value;
             }
         }
     }

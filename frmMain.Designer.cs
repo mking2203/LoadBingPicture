@@ -42,6 +42,7 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.chkInfo = new System.Windows.Forms.CheckBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -156,12 +157,21 @@
             this.chkInfo.UseVisualStyleBackColor = true;
             this.chkInfo.CheckedChanged += new System.EventHandler(this.chkInfo_CheckedChanged);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(12, 29);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 14;
+            // 
             // frmMain
             // 
             this.AcceptButton = this.btnSetDesktop;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 354);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.chkInfo);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.listBox1);
@@ -200,6 +210,7 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.CheckBox chkInfo;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

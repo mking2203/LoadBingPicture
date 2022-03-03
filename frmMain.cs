@@ -43,6 +43,7 @@ namespace LoadBingPicture
         private bool closeForm = false;
 
         private string bingData = string.Empty;
+        private string myRegion = "de-DE";
         private Bitmap thb;
 
         public enum Style : int
@@ -80,6 +81,8 @@ namespace LoadBingPicture
 
             notifyIcon1.ContextMenu = m_ContextMenu;
             #endregion
+
+            comboBox1.Items.Add("English USA");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -120,7 +123,7 @@ namespace LoadBingPicture
             addListbox("Search new image");
 
             WebClient client = new WebClient();
-            var webData = client.DownloadData("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=de-DE");
+            var webData = client.DownloadData("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=" + myRegion);
             string webString = Encoding.UTF8.GetString(webData);
 
             addListbox("Received JSON");
@@ -135,6 +138,8 @@ namespace LoadBingPicture
 
             title = (string)stuff.images[0].title;
             copyright = (string)stuff.images[0].copyright;
+
+            notifyIcon1.Text = DateTime.Now.ToShortDateString() + Environment.NewLine + title;
 
             string downloadLink = "https://www.bing.com" + stuff.images[0].urlbase;
             downloadLink += "_";
@@ -173,7 +178,7 @@ namespace LoadBingPicture
             return param1;
         }
 
-        private void makeDesktop(string filename)
+        private void makeDesktop(string filename, bool force = false)
         {
             addListbox("Set registry to Stretch");
             SetKey(Style.Stretch);
@@ -247,7 +252,15 @@ namespace LoadBingPicture
                 image2.Dispose();
             }
             else
+            {
                 addListbox("Actual file is up to date");
+
+                Image image1 = new Bitmap(Path.Combine(bingData, filename));
+
+                // show picture in the preview
+                pictureBox1.Image = image1;
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            }
 
             DisplayPicture(Path.Combine(bingData, newFilename), true);
             addListbox("Changed desktop");
