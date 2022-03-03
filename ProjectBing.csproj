@@ -100,8 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bing_favicon.ico" />
-    <None Include="bin\Debug\back75.png" />
+    <Content Include="Info.txt" />
     <None Include="Resources\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

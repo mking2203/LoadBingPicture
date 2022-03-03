@@ -1,0 +1,5 @@
+﻿%appdata%\Microsoft\Windows\Themes\CachedFiles
+
+or just...
+
+%appdata%\Microsoft\Windows\Themes\TranscodedWallpaper

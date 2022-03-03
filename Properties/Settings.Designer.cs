@@ -46,5 +46,17 @@ namespace LoadBingPicture.Properties {
                 this["ShowDescription"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public long PictureNo {
+            get {
+                return ((long)(this["PictureNo"]));
+            }
+            set {
+                this["PictureNo"] = value;
+            }
+        }
     }
 }

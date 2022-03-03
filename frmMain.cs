@@ -43,6 +43,7 @@ namespace LoadBingPicture
         private bool closeForm = false;
 
         private string bingData = string.Empty;
+        private Bitmap thb;
 
         public enum Style : int
         {
@@ -184,7 +185,7 @@ namespace LoadBingPicture
             {
                 addListbox("Add information to actual image");
 
-                Image image1 = Image.FromFile(Path.Combine(bingData, filename));
+                Image image1 = new Bitmap(Path.Combine(bingData, filename));
                 Image image2 = new Bitmap(Properties.Resources.back75);
 
                 int sz = image1.Height;
@@ -206,34 +207,41 @@ namespace LoadBingPicture
                         break;
                 }
 
-                using (Graphics gr = Graphics.FromImage(image1))
+                if (chkInfo.Checked)
                 {
-                    SizeF l1 = gr.MeasureString(title, stringFont);
-                    SizeF l2 = gr.MeasureString(copyright, stringFont);
+                    using (Graphics gr = Graphics.FromImage(image1))
+                    {
+                        SizeF l1 = gr.MeasureString(title, stringFont);
+                        SizeF l2 = gr.MeasureString(copyright, stringFont);
 
-                    int yValue = (int)l1.Height / 2;
+                        int yValue = (int)l1.Height / 2;
 
-                    float l = l1.Width;
-                    if (l2.Width > l) l = l2.Width;
+                        float l = l1.Width;
+                        if (l2.Width > l) l = l2.Width;
 
-                    int x = image1.Width - (int)l - 50;
+                        int x = image1.Width - (int)l - 50;
 
-                    gr.DrawImage(image2,
-                        new Rectangle(new Point(x, back * 8), new Size((int)l + 20, (3 * yValue) + (2 * (int)l1.Height))));
+                        gr.DrawImage(image2,
+                            new Rectangle(new Point(x, back * 8), new Size((int)l + 20, (3 * yValue) + (2 * (int)l1.Height))));
 
-                    gr.DrawString(title,
-                        stringFont,
-                        new SolidBrush(Color.White),
-                        new PointF(x + 10, back * 8 + yValue));
+                        gr.DrawString(title,
+                            stringFont,
+                            new SolidBrush(Color.White),
+                            new PointF(x + 10, back * 8 + yValue));
 
-                    gr.DrawString(copyright,
-                        stringFont,
-                        new SolidBrush(Color.White),
-                        new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));
+                        gr.DrawString(copyright,
+                            stringFont,
+                            new SolidBrush(Color.White),
+                            new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));
+                    }
                 }
 
                 image1.Save(Path.Combine(bingData, newFilename), ImageFormat.Jpeg);
                 addListbox("Saved new actual image");
+
+                // show picture in the preview
+                pictureBox1.Image = image1;
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 
                 image1.Dispose();
                 image2.Dispose();
@@ -246,14 +254,11 @@ namespace LoadBingPicture
 
             System.Threading.Thread.Sleep(3000);
 
-            pictureBox1.Image = Image.FromFile(Path.Combine(bingData, newFilename));
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-
             foreach (string f in Directory.GetFiles(bingData,"*.jpg"))
             {
                 if(f != Path.Combine(bingData, filename) && f != Path.Combine(bingData, newFilename))
                 {
-                    //File.Delete(Path.Combine(bingData, f));
+                    File.Delete(Path.Combine(bingData, f));
                 }
             }
         }
