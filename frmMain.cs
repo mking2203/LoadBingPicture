@@ -43,8 +43,10 @@ namespace LoadBingPicture
         private bool closeForm = false;
 
         private string bingData = string.Empty;
-        private string myRegion = "de-DE";
-        private Bitmap thb;
+
+        private string[] cultures = {"en-AU", "pt-BR", "zh-CN", "de-DE",
+                                     "fr-FR", "en-IN", "ja-JP", "en-CA",
+                                     "en-NZ", "es-ES", "en-US", "en-GB" }; 
 
         public enum Style : int
         {
@@ -82,7 +84,20 @@ namespace LoadBingPicture
             notifyIcon1.ContextMenu = m_ContextMenu;
             #endregion
 
-            comboBox1.Items.Add("English USA");
+            comboBox1.Items.Add("Australien");
+            comboBox1.Items.Add("Brasilien");
+            comboBox1.Items.Add("China");
+            comboBox1.Items.Add("Deutschland");
+            comboBox1.Items.Add("Frankreich");
+            comboBox1.Items.Add("Indien");
+            comboBox1.Items.Add("Japan");
+            comboBox1.Items.Add("Kanada");
+            comboBox1.Items.Add("Neuseeland");
+            comboBox1.Items.Add("Spanisch");
+            comboBox1.Items.Add("Vereinigte Staaten");
+            comboBox1.Items.Add("Vereinigtes Königreich");
+
+            comboBox1.SelectedIndex = Convert.ToInt32(Properties.Settings.Default["Region"]);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -123,7 +138,7 @@ namespace LoadBingPicture
             addListbox("Search new image");
 
             WebClient client = new WebClient();
-            var webData = client.DownloadData("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=" + myRegion);
+            var webData = client.DownloadData("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=" + cultures[comboBox1.SelectedIndex]);
             string webString = Encoding.UTF8.GetString(webData);
 
             addListbox("Received JSON");
@@ -244,34 +259,33 @@ namespace LoadBingPicture
                 image1.Save(Path.Combine(bingData, newFilename), ImageFormat.Jpeg);
                 addListbox("Saved new actual image");
 
-                // show picture in the preview
-                pictureBox1.Image = image1;
-                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-
                 image1.Dispose();
                 image2.Dispose();
             }
             else
             {
                 addListbox("Actual file is up to date");
-
-                Image image1 = new Bitmap(Path.Combine(bingData, filename));
-
-                // show picture in the preview
-                pictureBox1.Image = image1;
-                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             }
 
             DisplayPicture(Path.Combine(bingData, newFilename), true);
             addListbox("Changed desktop");
 
-            System.Threading.Thread.Sleep(3000);
+            pictureBox1.Image = null;
+            Application.DoEvents();
+
+            Image image = new Bitmap(Path.Combine(bingData, filename));
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.Image = image;
 
             foreach (string f in Directory.GetFiles(bingData,"*.jpg"))
             {
                 if(f != Path.Combine(bingData, filename) && f != Path.Combine(bingData, newFilename))
                 {
-                    File.Delete(Path.Combine(bingData, f));
+                    try
+                    {
+                        File.Delete(f);
+                    }
+                    catch { }
                 }
             }
         }
@@ -396,6 +410,8 @@ namespace LoadBingPicture
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            txtUpdate.Text = "Next update in " + (60 - DateTime.Now.Minute).ToString() + " min";
+
             if (initial)
             {
                 if (IsInternetConnected())
@@ -442,6 +458,15 @@ namespace LoadBingPicture
         {
             Properties.Settings.Default["ShowDescription"] =Convert.ToInt32(chkInfo.Checked);
             Properties.Settings.Default.Save();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex >= 0)
+            {
+                Properties.Settings.Default["Region"] = comboBox1.SelectedIndex;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

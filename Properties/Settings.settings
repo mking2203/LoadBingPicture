@@ -8,8 +8,8 @@
     <Setting Name="ShowDescription" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="Region" Type="System.String" Scope="User">
-      <Value Profile="(Default)">en-US</Value>
+    <Setting Name="Region" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
     </Setting>
   </Settings>
 </SettingsFile>

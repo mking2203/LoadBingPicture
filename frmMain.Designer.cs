@@ -43,6 +43,7 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.chkInfo = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.txtUpdate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -164,6 +165,16 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 14;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // txtUpdate
+            // 
+            this.txtUpdate.AutoSize = true;
+            this.txtUpdate.Location = new System.Drawing.Point(147, 223);
+            this.txtUpdate.Name = "txtUpdate";
+            this.txtUpdate.Size = new System.Drawing.Size(68, 13);
+            this.txtUpdate.TabIndex = 15;
+            this.txtUpdate.Text = "Next update:";
             // 
             // frmMain
             // 
@@ -171,6 +182,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 354);
+            this.Controls.Add(this.txtUpdate);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.chkInfo);
             this.Controls.Add(this.btnRefresh);
@@ -211,6 +223,7 @@
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.CheckBox chkInfo;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label txtUpdate;
     }
 }
 

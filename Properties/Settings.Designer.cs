@@ -49,10 +49,10 @@ namespace LoadBingPicture.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
-        public string Region {
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int Region {
             get {
-                return ((string)(this["Region"]));
+                return ((int)(this["Region"]));
             }
             set {
                 this["Region"] = value;
