@@ -16,15 +16,14 @@ namespace LoadBingPicture
         {
             public string baseurl;
             public string title;
+            public string description;
             public string copyright;
         }
         public BingPicture[] BingPictures;
 
 
         public LoadJson()
-        {
-
-        }
+        { }
 
         public bool DownloadJson(string path, string culture)
         {
@@ -44,14 +43,27 @@ namespace LoadBingPicture
 
                 dynamic stuff = JsonConvert.DeserializeObject(webString);
 
-                for (int i = 0; i < 7;i++)
+                for (int i = 0; i < 7; i++)
                 {
                     BingPictures[i] = new BingPicture();
                     BingPictures[i].baseurl = "https://www.bing.com" + (string)stuff.images[i].urlbase;
                     BingPictures[i].title = (string)stuff.images[i].title;
-                    BingPictures[i].copyright = (string)stuff.images[i].copyright;
-                }
 
+                    // split descripton / copyright
+                    string desc = (string)stuff.images[i].copyright;
+                    int x = desc.LastIndexOf("(");
+       
+                    if (x > 0)
+                    {
+                        BingPictures[i].description = desc.Substring(0, x - 1);
+                        BingPictures[i].copyright = desc.Substring(x + 1, desc.Length - x - 2);
+                    }
+                    else
+                    {
+                        BingPictures[i].description = desc;
+                        BingPictures[i].copyright = string.Empty; ;
+                    }
+                }
             }
             catch (Exception ex)
             {

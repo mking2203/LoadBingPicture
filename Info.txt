@@ -1,4 +1,10 @@
-﻿%appdata%\Microsoft\Windows\Themes\CachedFiles
+﻿//
+// Mark König, 03/2022
+//
+
+
+
+%appdata%\Microsoft\Windows\Themes\CachedFiles
 
 or just...
 

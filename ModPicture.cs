@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//
+// Mark König, 03/2022
+//
 
 using System.Drawing;
-using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace LoadBingPicture
 {
@@ -16,34 +14,41 @@ namespace LoadBingPicture
             Image image1 = new Bitmap(original);
             Image image2 = new Bitmap(Properties.Resources.back75);
 
+            Rectangle ScreenResolution = Screen.PrimaryScreen.Bounds;
+
+            int sWidth = ScreenResolution.Width;
+            int pWidth = original.Width;
+
+            float factor = (float)pWidth / (float)sWidth;
+            int sFont = 8;
+            bool run = true;
+
             int sz = image1.Height;
             int back = sz / 10;
 
-            Font stringFont = new Font("Arial", 14);
-            switch (resolution)
-            {
-                case 0:
-                    stringFont = new Font("Arial", 10);
-                    break;
-                default:
-                case 1:
-                    //
-                    break;
-                case 2:
-                    stringFont = new Font("Arial", 34);
-                    break;
-            }
+            float l = 0.0f;
+            SizeF l1 = new SizeF(0,0);
+            SizeF l2 = new SizeF(0, 0);
+            Font stringFont = new Font("Arial", sFont);
 
             using (Graphics gr = Graphics.FromImage(image1))
             {
-                SizeF l1 = gr.MeasureString(picture.title, stringFont);
-                SizeF l2 = gr.MeasureString(picture.copyright, stringFont);
+                while (run)
+                {
+                    stringFont = new Font("Arial", sFont);
+                    l1 = gr.MeasureString(picture.title, stringFont);
+                    l2 = gr.MeasureString(picture.description, stringFont);
+
+                    l = l1.Width;
+                    if (l2.Width > l) l = l2.Width;
+
+                    if ((int)l > (sWidth / 2) * factor)
+                        run = false;
+                    else
+                        sFont = sFont + 1;
+                }
 
                 int yValue = (int)l1.Height / 2;
-
-                float l = l1.Width;
-                if (l2.Width > l) l = l2.Width;
-
                 int x = original.Width - (int)l - 50;
 
                 gr.DrawImage(image2,
@@ -54,7 +59,7 @@ namespace LoadBingPicture
                     new SolidBrush(Color.White),
                     new PointF(x + 10, back * 8 + yValue));
 
-                gr.DrawString(picture.copyright,
+                gr.DrawString(picture.description,
                     stringFont,
                     new SolidBrush(Color.White),
                     new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));

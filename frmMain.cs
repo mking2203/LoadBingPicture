@@ -18,8 +18,6 @@ namespace LoadBingPicture
 {
     public partial class frmMain : Form
     {
-
-
         private bool initial = true;
         private bool closeForm = false;
 
@@ -29,7 +27,6 @@ namespace LoadBingPicture
         private string[] cultures = {"en-AU", "pt-BR", "zh-CN", "de-DE",
                                      "fr-FR", "en-IN", "ja-JP", "en-CA",
                                      "en-NZ", "es-ES", "en-US", "en-GB" };
-
 
         public frmMain()
         {
@@ -125,7 +122,7 @@ namespace LoadBingPicture
 
             if (bingData.BingPictures[0] != null)
             {
-                notifyIcon1.Text = DateTime.Now.ToShortDateString() + Environment.NewLine + bingData.BingPictures[0].title;
+                notifyIcon1.Text = bingData.BingPictures[0].title + Environment.NewLine + bingData.BingPictures[0].copyright;
 
                 string downloadLink = bingData.BingPictures[0].baseurl;
                 downloadLink += "_";
