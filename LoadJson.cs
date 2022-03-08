@@ -26,7 +26,7 @@ namespace LoadBingPicture
 
         }
 
-        public int DownloadJson(string path, string culture)
+        public bool DownloadJson(string path, string culture)
         {
             BingPictures = new BingPicture[7];
 
@@ -56,11 +56,11 @@ namespace LoadBingPicture
             catch (Exception ex)
             {
                 // somthing wrong?
-                return 0;
+                return false;
             }
 
             // fished OK
-            return 1;
+            return true;
         }
 
     }

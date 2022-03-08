@@ -18,7 +18,7 @@ namespace LoadBingPicture
 {
     public partial class frmMain : Form
     {
-       
+
 
         private bool initial = true;
         private bool closeForm = false;
@@ -28,14 +28,15 @@ namespace LoadBingPicture
 
         private string[] cultures = {"en-AU", "pt-BR", "zh-CN", "de-DE",
                                      "fr-FR", "en-IN", "ja-JP", "en-CA",
-                                     "en-NZ", "es-ES", "en-US", "en-GB" }; 
+                                     "en-NZ", "es-ES", "en-US", "en-GB" };
 
-    
+
         public frmMain()
         {
             InitializeComponent();
 
             #region set data path
+
             bingDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData,
                                                  Environment.SpecialFolderOption.Create);
 
@@ -44,9 +45,11 @@ namespace LoadBingPicture
             {
                 Directory.CreateDirectory(bingDataPath);
             }
+
             #endregion
 
             #region set context menu
+
             ContextMenu m_ContextMenu = new ContextMenu();
             MenuItem menuEntryExit = new MenuItem("Close", new EventHandler(ExitApplicationHandler));
             MenuItem menuEntryShow = new MenuItem("Settings", new EventHandler(ShowMainFormHandler));
@@ -55,6 +58,7 @@ namespace LoadBingPicture
             m_ContextMenu.MenuItems.Add(menuEntryExit);
 
             notifyIcon1.ContextMenu = m_ContextMenu;
+
             #endregion
 
             comboBox1.Items.Add("Australien");
@@ -94,7 +98,6 @@ namespace LoadBingPicture
                     selResolution01.Checked = true;
                     break;
             }
-
             chkInfo.Checked = Convert.ToBoolean(Properties.Settings.Default["ShowDescription"]);
 
             // start timer
@@ -111,52 +114,59 @@ namespace LoadBingPicture
         private string downloadData()
         {
             addListbox("----------------");
-            addListbox("Search new image");
+            addListbox("Start update Bing");
 
             // download json data   
-            bingData.DownloadJson(this.bingDataPath, cultures[comboBox1.SelectedIndex]);
-
-            addListbox("Received JSON");
-          
-            notifyIcon1.Text = DateTime.Now.ToShortDateString() + Environment.NewLine + bingData.BingPictures[0].title;
-
-            string downloadLink = bingData.BingPictures[0].baseurl;
-            downloadLink += "_";
-
-            switch (Properties.Settings.Default["Resolution"])
-            {
-                case 0:
-                    downloadLink += "1366x768.jpg";
-                    break;
-                default:
-                case 1:
-                    downloadLink += "1920x1080.jpg";
-                    break;
-                case 2:
-                    downloadLink += "UHD.jpg";
-                    break;
-            }
-
-            Uri myUri = new Uri(downloadLink);
-            string param1 = System.Web.HttpUtility.ParseQueryString(myUri.Query).Get("id");
-
-            if (!File.Exists(Path.Combine(this.bingDataPath, param1)))
-            {
-                addListbox("Try to download file");
-
-                WebClient client = new WebClient();
-                client.DownloadFile(downloadLink,
-                                Path.Combine(this.bingDataPath, param1));
-
-                client.Dispose();
-
-                addListbox("File for today downloaded");
-
-            }
+            bool result = bingData.DownloadJson(bingDataPath, cultures[comboBox1.SelectedIndex]);
+            if (result)
+                addListbox("Received JSON");
             else
-                addListbox("File already downloaded");
+                addListbox("Download JSON failed");
 
-            return param1;
+            if (bingData.BingPictures[0] != null)
+            {
+                notifyIcon1.Text = DateTime.Now.ToShortDateString() + Environment.NewLine + bingData.BingPictures[0].title;
+
+                string downloadLink = bingData.BingPictures[0].baseurl;
+                downloadLink += "_";
+
+                switch (Properties.Settings.Default["Resolution"])
+                {
+                    case 0:
+                        downloadLink += "1366x768.jpg";
+                        break;
+                    default:
+                    case 1:
+                        downloadLink += "1920x1080.jpg";
+                        break;
+                    case 2:
+                        downloadLink += "UHD.jpg";
+                        break;
+                }
+
+                Uri myUri = new Uri(downloadLink);
+                string param1 = System.Web.HttpUtility.ParseQueryString(myUri.Query).Get("id");
+
+                if (!File.Exists(Path.Combine(this.bingDataPath, param1)))
+                {
+                    addListbox("Try to download file");
+
+                    WebClient client = new WebClient();
+                    client.DownloadFile(downloadLink,
+                                    Path.Combine(this.bingDataPath, param1));
+
+                    client.Dispose();
+
+                    addListbox("File for today downloaded");
+
+                }
+                else
+                    addListbox("File already downloaded");
+
+                return param1;
+            }
+
+            return string.Empty;
         }
 
         private void makeDesktop(string filename, bool force = false)
@@ -170,63 +180,15 @@ namespace LoadBingPicture
             if (!File.Exists(Path.Combine(bingDataPath, newFilename)))
             {
                 addListbox("Add information to actual image");
-
-                Image image1 = new Bitmap(Path.Combine(bingDataPath, filename));
-                Image image2 = new Bitmap(Properties.Resources.back75);
-
-                int sz = image1.Height;
-                int back = sz / 10;
-
-                Font stringFont = new Font("Arial", 14);
-
-                switch (Properties.Settings.Default["Resolution"])
-                {
-                    case 0:
-                        stringFont = new Font("Arial", 10);
-                        break;
-                    default:
-                    case 1:
-                        //
-                        break;
-                    case 2:
-                        stringFont = new Font("Arial", 34);
-                        break;
-                }
-
-                if (chkInfo.Checked)
-                {
-                    using (Graphics gr = Graphics.FromImage(image1))
-                    {
-                        SizeF l1 = gr.MeasureString(bingData.BingPictures[0].title, stringFont);
-                        SizeF l2 = gr.MeasureString(bingData.BingPictures[0].copyright, stringFont);
-
-                        int yValue = (int)l1.Height / 2;
-
-                        float l = l1.Width;
-                        if (l2.Width > l) l = l2.Width;
-
-                        int x = image1.Width - (int)l - 50;
-
-                        gr.DrawImage(image2,
-                            new Rectangle(new Point(x, back * 8), new Size((int)l + 20, (3 * yValue) + (2 * (int)l1.Height))));
-
-                        gr.DrawString(bingData.BingPictures[0].title,
-                            stringFont,
-                            new SolidBrush(Color.White),
-                            new PointF(x + 10, back * 8 + yValue));
-
-                        gr.DrawString(bingData.BingPictures[0].copyright,
-                            stringFont,
-                            new SolidBrush(Color.White),
-                            new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));
-                    }
-                }
+                Image image1 = ModPicture.ChangePicture(new Bitmap(Path.Combine(bingDataPath, filename)),
+                                                        (int) Properties.Settings.Default["Resolution"],
+                                                        bingData.BingPictures[0]
+                                                        );
 
                 image1.Save(Path.Combine(bingDataPath, newFilename), ImageFormat.Jpeg);
                 addListbox("Saved new actual image");
 
                 image1.Dispose();
-                image2.Dispose();
             }
             else
             {
@@ -243,9 +205,9 @@ namespace LoadBingPicture
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.Image = image;
 
-            foreach (string f in Directory.GetFiles(bingDataPath,"*.jpg"))
+            foreach (string f in Directory.GetFiles(bingDataPath, "*.jpg"))
             {
-                if(f != Path.Combine(bingDataPath, filename) && f != Path.Combine(bingDataPath, newFilename))
+                if (f != Path.Combine(bingDataPath, filename) && f != Path.Combine(bingDataPath, newFilename))
                 {
                     try
                     {
@@ -306,7 +268,8 @@ namespace LoadBingPicture
                 if (CheckInternet.IsInternetConnected())
                 {
                     string name = downloadData();
-                    makeDesktop(name);
+                    if (name != string.Empty)
+                        makeDesktop(name);
                     initial = false;
                 }
             }
@@ -316,7 +279,8 @@ namespace LoadBingPicture
                 if (DateTime.Now.Minute == 00)
                 {
                     string name = downloadData();
-                    makeDesktop(name);
+                    if (name != string.Empty)
+                        makeDesktop(name);
                 }
             }
         }
@@ -338,14 +302,15 @@ namespace LoadBingPicture
             timer1.Enabled = false;
 
             string name = downloadData();
-            makeDesktop(name);
+            if (name != string.Empty)
+                makeDesktop(name);
 
             timer1.Enabled = true;
         }
 
         private void chkInfo_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default["ShowDescription"] =Convert.ToInt32(chkInfo.Checked);
+            Properties.Settings.Default["ShowDescription"] = Convert.ToInt32(chkInfo.Checked);
             Properties.Settings.Default.Save();
         }
 
