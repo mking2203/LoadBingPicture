@@ -44,6 +44,10 @@
             this.chkInfo = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.txtUpdate = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtTitle = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtDescription = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -170,11 +174,47 @@
             // txtUpdate
             // 
             this.txtUpdate.AutoSize = true;
-            this.txtUpdate.Location = new System.Drawing.Point(147, 223);
+            this.txtUpdate.Location = new System.Drawing.Point(395, 224);
             this.txtUpdate.Name = "txtUpdate";
             this.txtUpdate.Size = new System.Drawing.Size(68, 13);
             this.txtUpdate.TabIndex = 15;
             this.txtUpdate.Text = "Next update:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 165);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Title:";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.AutoSize = true;
+            this.txtTitle.Location = new System.Drawing.Point(13, 178);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(53, 13);
+            this.txtTitle.TabIndex = 17;
+            this.txtTitle.Text = "... loading";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(13, 224);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "... loading";
+            // 
+            // txtDescription
+            // 
+            this.txtDescription.AutoSize = true;
+            this.txtDescription.Location = new System.Drawing.Point(13, 211);
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(63, 13);
+            this.txtDescription.TabIndex = 18;
+            this.txtDescription.Text = "Description:";
             // 
             // frmMain
             // 
@@ -182,6 +222,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 354);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.txtTitle);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtUpdate);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.chkInfo);
@@ -224,6 +268,10 @@
         private System.Windows.Forms.CheckBox chkInfo;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label txtUpdate;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label txtTitle;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label txtDescription;
     }
 }
 

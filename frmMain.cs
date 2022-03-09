@@ -175,8 +175,8 @@ namespace LoadBingPicture
 
         private void makeDesktop(string filename, bool force = false)
         {
-            addListbox("Set registry to Stretch");
-            SetDesktop.SetKey(SetDesktop.DesktopStyle.Stretch);
+            addListbox("Set registry to Fit");
+            SetDesktop.SetKey(SetDesktop.DesktopStyle.Fit);
 
             string newFilename = filename.Substring(0, filename.Length - 4);
             newFilename = newFilename + "mod" + filename.Substring(filename.Length - 4);
