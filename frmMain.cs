@@ -122,7 +122,14 @@ namespace LoadBingPicture
 
             if (bingData.BingPictures[0] != null)
             {
-                notifyIcon1.Text = bingData.BingPictures[0].title + Environment.NewLine + bingData.BingPictures[0].copyright;
+                string txt = bingData.BingPictures[0].title + Environment.NewLine + bingData.BingPictures[0].copyright;
+                if (txt.Length > 63)
+                {
+                    txt = txt.Substring(0, 59);
+                    txt += " ...";
+                }
+
+                notifyIcon1.Text = txt;
 
                 string downloadLink = bingData.BingPictures[0].baseurl;
                 downloadLink += "_";
