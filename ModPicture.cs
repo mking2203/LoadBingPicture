@@ -13,45 +13,28 @@ namespace LoadBingPicture
     {
         public static Image ChangePicture(Image original, int resolution, LoadJson.BingPicture picture)
         {
+            // load original image
             Image image = new Bitmap(original);
-
+            // rezize to the new size
             Rectangle ScreenResolution = Screen.PrimaryScreen.Bounds;
-
             Image image1 = FixedSize(image, ScreenResolution.Width, ScreenResolution.Height);
+            // dispose the original
             image.Dispose();
-
+            // load the back gfx
             Image image2 = new Bitmap(Properties.Resources.back75);
 
-            int sz = image1.Height;
-            int back = sz / 10;
-
-            float l = 0.0f;
-            int sFont = 8;
-            bool run = true;
+            // we want to cover 1/10 of the back
+            int back = image1.Height / 10;
 
             using (Graphics gr = Graphics.FromImage(image1))
             {
-                Font stringFont = new Font("Arial", sFont);
+                // we have 2 line and 3 spaces 
+                Font stringFont = new Font("Arial", back / 5);
+                // measure the size
+                SizeF l1 = gr.MeasureString(picture.title, stringFont);
+                SizeF l2 = gr.MeasureString(picture.description, stringFont);
 
-                SizeF l1 = new SizeF(0, 0);
-                SizeF l2 = new SizeF(0, 0);
-
-                while (run)
-                {
-                    stringFont = new Font("Arial", sFont);
-                    l1 = gr.MeasureString(picture.title, stringFont);
-                    l2 = gr.MeasureString(picture.description, stringFont);
-
-                    l = l1.Width;
-                    if (l2.Width > l) l = l2.Width;
-
-                    if ((int)l > (image1.Width / 2))
-                        run = false;
-                    else
-                        sFont = sFont + 1;
-                }
-
-                l = l1.Width;
+                float l = l1.Width;
                 if (l2.Width > l) l = l2.Width;
 
                 int yValue = (int)l1.Height / 2;
@@ -72,6 +55,7 @@ namespace LoadBingPicture
                     new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));
             }
 
+            // dispose the back gfx
             image2.Dispose();
 
             return image1;

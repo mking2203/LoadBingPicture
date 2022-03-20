@@ -22,6 +22,7 @@ namespace LoadBingPicture
         private bool closeForm = false;
 
         private string bingDataPath = string.Empty;
+        private string bingThumbsPath = string.Empty;
         private LoadJson bingData;
 
         private string[] cultures = {"en-AU", "pt-BR", "zh-CN", "de-DE",
@@ -41,6 +42,11 @@ namespace LoadBingPicture
             if (!Directory.Exists(bingDataPath))
             {
                 Directory.CreateDirectory(bingDataPath);
+            }
+            bingThumbsPath = bingDataPath + "\\LoadBingPicture\\thumbs";
+            if (!Directory.Exists(bingThumbsPath))
+            {
+                Directory.CreateDirectory(bingThumbsPath);
             }
 
             #endregion
@@ -116,7 +122,32 @@ namespace LoadBingPicture
             // download json data   
             bool result = bingData.DownloadJson(bingDataPath, cultures[comboBox1.SelectedIndex]);
             if (result)
+            {
                 addListbox("Received JSON");
+
+                WebClient client = new WebClient();
+
+                foreach (LoadJson.BingPicture b in bingData.BingPictures)
+                {
+                    {
+                        string url = b.baseurl + "_320x240.jpg";
+
+                        Uri myUri = new Uri(url);
+                        string param1 = System.Web.HttpUtility.ParseQueryString(myUri.Query).Get("id");
+
+                        if (!File.Exists(Path.Combine(this.bingThumbsPath, param1)))
+                        {
+                            addListbox("Try to download thumb " + param1);
+
+                            client.DownloadFile(url,
+                                                Path.Combine(this.bingThumbsPath, param1));
+
+                            addListbox("File downloaded");
+                        }
+                    }
+                }
+                client.Dispose();
+            }
             else
                 addListbox("Download JSON failed");
 
@@ -185,7 +216,7 @@ namespace LoadBingPicture
             {
                 addListbox("Add information to actual image");
                 Image image1 = ModPicture.ChangePicture(new Bitmap(Path.Combine(bingDataPath, filename)),
-                                                        (int) Properties.Settings.Default["Resolution"],
+                                                        (int)Properties.Settings.Default["Resolution"],
                                                         bingData.BingPictures[0]
                                                         );
 
@@ -209,6 +240,11 @@ namespace LoadBingPicture
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.Image = image;
 
+            txtTitle.Text = bingData.BingPictures[0].title;
+            txtDescription.Text = bingData.BingPictures[0].description;
+            txtCopyright.Text = bingData.BingPictures[0].copyright;
+
+
             foreach (string f in Directory.GetFiles(bingDataPath, "*.jpg"))
             {
                 if (f != Path.Combine(bingDataPath, filename) && f != Path.Combine(bingDataPath, newFilename))
@@ -223,6 +259,7 @@ namespace LoadBingPicture
         }
 
         #region form resize / closing handling
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == WindowState)
@@ -254,7 +291,10 @@ namespace LoadBingPicture
 
         private void ExitApplicationHandler(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Do you really want to close this?", "Stop the this", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Do you really want to stop the Bing picture loader?",
+                                "Stop the Bing picture loader",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 closeForm = true;
                 Application.Exit();

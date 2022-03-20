@@ -52,7 +52,7 @@ namespace LoadBingPicture
                     // split descripton / copyright
                     string desc = (string)stuff.images[i].copyright;
                     int x = desc.LastIndexOf("(");
-       
+
                     if (x > 0)
                     {
                         BingPictures[i].description = desc.Substring(0, x - 1);
