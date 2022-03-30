@@ -50,6 +50,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtCopyright = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.btnMinus = new System.Windows.Forms.Button();
+            this.btnPlus = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -236,12 +238,34 @@
             this.label5.TabIndex = 20;
             this.label5.Text = "Copyright:";
             // 
+            // btnMinus
+            // 
+            this.btnMinus.Location = new System.Drawing.Point(36, 90);
+            this.btnMinus.Name = "btnMinus";
+            this.btnMinus.Size = new System.Drawing.Size(30, 30);
+            this.btnMinus.TabIndex = 22;
+            this.btnMinus.Text = "<<";
+            this.btnMinus.UseVisualStyleBackColor = true;
+            this.btnMinus.Click += new System.EventHandler(this.btnMinus_Click);
+            // 
+            // btnPlus
+            // 
+            this.btnPlus.Location = new System.Drawing.Point(72, 90);
+            this.btnPlus.Name = "btnPlus";
+            this.btnPlus.Size = new System.Drawing.Size(30, 30);
+            this.btnPlus.TabIndex = 23;
+            this.btnPlus.Text = ">>";
+            this.btnPlus.UseVisualStyleBackColor = true;
+            this.btnPlus.Click += new System.EventHandler(this.btnPlus_Click);
+            // 
             // frmMain
             // 
             this.AcceptButton = this.btnSetDesktop;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 455);
+            this.Controls.Add(this.btnPlus);
+            this.Controls.Add(this.btnMinus);
             this.Controls.Add(this.txtCopyright);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtDescription);
@@ -296,6 +320,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label txtCopyright;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnMinus;
+        private System.Windows.Forms.Button btnPlus;
     }
 }
 

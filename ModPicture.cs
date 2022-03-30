@@ -97,7 +97,7 @@ namespace LoadBingPicture
                              imgPhoto.VerticalResolution);
 
             Graphics grPhoto = Graphics.FromImage(bmPhoto);
-            grPhoto.Clear(Color.White);
+            grPhoto.Clear(Color.Black);
             grPhoto.InterpolationMode =
                     InterpolationMode.HighQualityBicubic;
 

@@ -29,6 +29,8 @@ namespace LoadBingPicture
                                      "fr-FR", "en-IN", "ja-JP", "en-CA",
                                      "en-NZ", "es-ES", "en-US", "en-GB" };
 
+        private int selectedImage = 0;
+
         public frmMain()
         {
             InitializeComponent();
@@ -43,7 +45,7 @@ namespace LoadBingPicture
             {
                 Directory.CreateDirectory(bingDataPath);
             }
-            bingThumbsPath = bingDataPath + "\\LoadBingPicture\\thumbs";
+            bingThumbsPath = bingDataPath + "\\Thumbs";
             if (!Directory.Exists(bingThumbsPath))
             {
                 Directory.CreateDirectory(bingThumbsPath);
@@ -135,6 +137,8 @@ namespace LoadBingPicture
                         Uri myUri = new Uri(url);
                         string param1 = System.Web.HttpUtility.ParseQueryString(myUri.Query).Get("id");
 
+                        b.thumb = param1;
+
                         if (!File.Exists(Path.Combine(this.bingThumbsPath, param1)))
                         {
                             addListbox("Try to download thumb " + param1);
@@ -151,9 +155,9 @@ namespace LoadBingPicture
             else
                 addListbox("Download JSON failed");
 
-            if (bingData.BingPictures[0] != null)
+            if (bingData.BingPictures[selectedImage] != null)
             {
-                string txt = bingData.BingPictures[0].title + Environment.NewLine + bingData.BingPictures[0].copyright;
+                string txt = bingData.BingPictures[selectedImage].title + Environment.NewLine + bingData.BingPictures[selectedImage].copyright;
                 if (txt.Length > 63)
                 {
                     txt = txt.Substring(0, 59);
@@ -162,7 +166,7 @@ namespace LoadBingPicture
 
                 notifyIcon1.Text = txt;
 
-                string downloadLink = bingData.BingPictures[0].baseurl;
+                string downloadLink = bingData.BingPictures[selectedImage].baseurl;
                 downloadLink += "_";
 
                 switch (Properties.Settings.Default["Resolution"])
@@ -364,6 +368,44 @@ namespace LoadBingPicture
             {
                 Properties.Settings.Default["Region"] = comboBox1.SelectedIndex;
                 Properties.Settings.Default.Save();
+            }
+        }
+
+        private void btnMinus_Click(object sender, EventArgs e)
+        {
+            if (selectedImage > 0)
+            {
+                selectedImage--;
+
+                pictureBox1.Image = null;
+                Application.DoEvents();
+
+                txtTitle.Text = bingData.BingPictures[selectedImage].title;
+                txtDescription.Text = bingData.BingPictures[selectedImage].description;
+                txtCopyright.Text = bingData.BingPictures[selectedImage].copyright;
+
+                Image image = new Bitmap(Path.Combine(bingThumbsPath, bingData.BingPictures[selectedImage].thumb));
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureBox1.Image = image;
+            }
+        }
+
+        private void btnPlus_Click(object sender, EventArgs e)
+        {
+            if (selectedImage < 6)
+            {
+                selectedImage++;
+
+                pictureBox1.Image = null;
+                Application.DoEvents();
+
+                txtTitle.Text = bingData.BingPictures[selectedImage].title;
+                txtDescription.Text = bingData.BingPictures[selectedImage].description;
+                txtCopyright.Text = bingData.BingPictures[selectedImage].copyright;
+
+                Image image = new Bitmap(Path.Combine(bingThumbsPath, bingData.BingPictures[selectedImage].thumb));
+                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                pictureBox1.Image = image;
             }
         }
     }

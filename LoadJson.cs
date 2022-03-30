@@ -18,9 +18,9 @@ namespace LoadBingPicture
             public string title;
             public string description;
             public string copyright;
+            public string thumb;
         }
         public BingPicture[] BingPictures;
-
 
         public LoadJson()
         { }
@@ -65,7 +65,7 @@ namespace LoadBingPicture
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 // somthing wrong?
                 return false;
