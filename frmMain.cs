@@ -105,9 +105,27 @@ namespace LoadBingPicture
             }
             chkInfo.Checked = Convert.ToBoolean(Properties.Settings.Default["ShowDescription"]);
 
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
             // start timer
             timer1.Enabled = true;
             timer1_Tick(this, new EventArgs());
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if (e.Mode == PowerModes.Resume)
+            {
+                addListbox("Power mode changed");
+
+                timer1.Enabled = false;
+
+                string name = downloadData();
+                if (name != string.Empty)
+                    makeDesktop(name);
+
+                timer1.Enabled = true;
+            }
         }
 
         private void addListbox(string txt)
