@@ -105,19 +105,19 @@ namespace LoadBingPicture
             }
             chkInfo.Checked = Convert.ToBoolean(Properties.Settings.Default["ShowDescription"]);
 
-            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+            SystemEvents.SessionSwitch += SystemEvents_SessionSwitch;
 
             // start timer
             timer1.Enabled = true;
             timer1_Tick(this, new EventArgs());
         }
 
-        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
-            if (e.Mode == PowerModes.Resume)
-            {
-                addListbox("Power mode changed");
+            addListbox(e.Reason.ToString());
 
+            if ((e.Reason == SessionSwitchReason.SessionLogon) || (e.Reason == SessionSwitchReason.SessionUnlock))
+            {
                 timer1.Enabled = false;
 
                 string name = downloadData();
@@ -293,6 +293,7 @@ namespace LoadBingPicture
             if ((e.CloseReason == CloseReason.WindowsShutDown) || (closeForm))
             {
                 // other
+                SystemEvents.SessionSwitch -= SystemEvents_SessionSwitch;
             }
             else
             {
