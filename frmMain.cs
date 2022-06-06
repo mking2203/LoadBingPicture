@@ -110,6 +110,8 @@ namespace LoadBingPicture
             // start timer
             timer1.Enabled = true;
             timer1_Tick(this, new EventArgs());
+
+            Hide();
         }
 
         private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
