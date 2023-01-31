@@ -32,7 +32,17 @@ namespace LoadBingPicture
                 Font stringFont = new Font("Arial", back / 5);
                 // measure the size
                 SizeF l1 = gr.MeasureString(picture.title, stringFont);
-                SizeF l2 = gr.MeasureString(picture.description, stringFont);
+
+                string desc = picture.description;
+                SizeF l2 = gr.MeasureString(desc, stringFont);
+
+                while (l2.Width > image1.Width)
+                {
+                    desc = desc.Substring(0, desc.Length - 8);
+                    desc = desc + "...";
+                    l2 = gr.MeasureString(desc, stringFont);
+                }
+
 
                 float l = l1.Width;
                 if (l2.Width > l) l = l2.Width;
@@ -49,7 +59,7 @@ namespace LoadBingPicture
                     new SolidBrush(Color.White),
                     new PointF(x + 10, back * 8 + yValue));
 
-                gr.DrawString(picture.description,
+                gr.DrawString(desc,
                     stringFont,
                     new SolidBrush(Color.White),
                     new PointF(x + 10, back * 8 + yValue + (int)l1.Height + yValue));
