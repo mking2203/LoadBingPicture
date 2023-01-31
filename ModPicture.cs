@@ -36,13 +36,12 @@ namespace LoadBingPicture
                 string desc = picture.description;
                 SizeF l2 = gr.MeasureString(desc, stringFont);
 
-                while (l2.Width > image1.Width)
+                while (l2.Width > (image1.Width - 100))
                 {
                     desc = desc.Substring(0, desc.Length - 8);
                     desc = desc + "...";
                     l2 = gr.MeasureString(desc, stringFont);
                 }
-
 
                 float l = l1.Width;
                 if (l2.Width > l) l = l2.Width;
